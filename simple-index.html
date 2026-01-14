@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>童智药嘱 - 儿童药品管理系统</title>
+    <style>
+        /* 基础样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 全局样式 */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+        }
+
+        /* 容器样式 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 头部样式 */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* 导航样式 */
+        nav {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1rem;
+            padding: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .nav-links li a {
+            color: #666;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-links li a:hover {
+            background: #f0f0f0;
+            color: #667eea;
+        }
+
+        /* 主内容样式 */
+        main {
+            padding: 2rem 0;
+        }
+
+        /* 卡片样式 */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .card h2 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .card p {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        /* 功能模块样式 */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* 按钮样式 */
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        /* 页脚样式 */
+        footer {
+            background: #333;
+            color: white;
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .nav-links {
+                justify-content: center;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .card:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        /* 功能模块内容样式 */
+        .module-content {
+            display: none;
+        }
+
+        .module-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* 表格样式 */
+        .table-container {
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f5f7fa;
+        }
+
+        /* 表单样式 */
+        form {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+        }
+
+        /* 按钮组样式 */
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            background-image: none;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.4);
+        }
+
+        /* 消息提示样式 */
+        .message {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* 计算器样式 */
+        .calculator-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .result-card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .result-card .result-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        /* 聊天界面样式 */
+        .chat-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 1rem;
+            background: #f5f7fa;
+        }
+
+        .message-bubble {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message-bubble.user {
+            align-items: flex-end;
+        }
+
+        .message-bubble.agent {
+            align-items: flex-start;
+        }
+
+        .message-content {
+            padding: 0.75rem 1rem;
+            border-radius: 18px;
+            max-width: 70%;
+        }
+
+        .message-bubble.user .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-bubble.agent .message-content {
+            background: white;
+            color: #333;
+            border: 1px solid #e0e0e0;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            color: #666;
+            margin: 0.25rem 0;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .chat-input input {
+            flex: 1;
+            border-radius: 20px;
+        }
+
+        .chat-input button {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 数据分析样式 */
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .message-content {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部 -->
+    <header>
+        <div class="container header-content">
+            <div>
+                <h1>童智药嘱</h1>
+                <p class="subtitle">专业的儿童药品管理系统</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- 导航 -->
+    <nav>
+        <div class="container">
+            <ul class="nav-links">
+                <li><a href="#">首页</a></li>
+                <li><a href="#features">功能模块</a></li>
+                <li><a href="#about">关于我们</a></li>
+                <li><a href="#contact">联系我们</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+        <main>
+            <div class="container">
+                <!-- 欢迎卡片 -->
+                <div class="card">
+                    <h2>欢迎使用童智药嘱</h2>
+                    <p>童智药嘱是一款专业的儿童药品管理系统，致力于为家长和医护人员提供安全、便捷的儿童用药指导和管理服务。</p>
+                    <p>我们的系统包含药品信息管理、儿童中成药剂量计算、RUCAM肝损伤评估等功能模块，帮助您更好地管理和使用儿童药品。</p>
+                    <button class="btn" onclick="showModule('welcome')">了解更多</button>
+                </div>
+
+                <!-- 功能模块 -->
+                <div class="card" id="features">
+                    <h2>功能模块</h2>
+                    <div class="features">
+                        <div class="feature-card" onclick="showModule('medicines')">
+                            <h3>药品列表</h3>
+                            <p>查看和管理所有药品信息，包括药品基本信息、适应症、用法用量等。</p>
+                        </div>
+                        <div class="feature-card" onclick="showModule('add-medicine')">
+                            <h3>添加药品</h3>
+                            <p>录入新的药品信息，包括药品名称、规格、生产厂家等详细信息。</p>
+                        </div>
+                        <div class="feature-card" onclick="showModule('dosage-calculator')">
+                            <h3>剂量计算器</h3>
+                            <p>根据儿童年龄和体重计算用药剂量，确保用药安全。</p>
+                        </div>
+                        <div class="feature-card" onclick="showModule('rucam-assessment')">
+                            <h3>RUCAM评估</h3>
+                            <p>评估药物性肝损伤的可能性，为临床用药提供参考。</p>
+                        </div>
+                        <div class="feature-card" onclick="showModule('ai-agent')">
+                            <h3>智能用药指导</h3>
+                            <p>获取智能用药指导，解答用药疑问。</p>
+                        </div>
+                        <div class="feature-card" onclick="showModule('data-analysis')">
+                            <h3>数据分析</h3>
+                            <p>分析药品使用情况，提供数据支持。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 功能模块内容区域 -->
+                <div class="card">
+                    <!-- 药品列表模块 -->
+                    <div id="medicines" class="module-content">
+                        <h3>药品列表</h3>
+                        <div class="table-container">
+                            <table id="medicines-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>通用名</th>
+                                        <th>商品名</th>
+                                        <th>分类</th>
+                                        <th>规格</th>
+                                        <th>生产厂家</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="medicines-tbody">
+                                    <!-- 药品数据将通过JavaScript动态加载 -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="medicines-message"></div>
+                    </div>
+
+                    <!-- 添加药品模块 -->
+                    <div id="add-medicine" class="module-content">
+                        <h3>添加药品</h3>
+                        <form id="add-medicine-form">
+                            <div class="form-group">
+                                <label for="generic-name">通用名称</label>
+                                <input type="text" id="generic-name" name="genericName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="brand-name">商品名称</label>
+                                <input type="text" id="brand-name" name="brandName">
+                            </div>
+                            <div class="form-group">
+                                <label for="category">分类</label>
+                                <select id="category" name="category">
+                                    <option value="中成药">中成药</option>
+                                    <option value="化学药">化学药</option>
+                                    <option value="生物制品">生物制品</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="specification">规格</label>
+                                <input type="text" id="specification" name="specification">
+                            </div>
+                            <div class="form-group">
+                                <label for="manufacturer">生产厂家</label>
+                                <input type="text" id="manufacturer" name="manufacturer">
+                            </div>
+                            <div class="form-group">
+                                <label for="indications">适应症（用分号分隔）</label>
+                                <textarea id="indications" name="indications" rows="3"></textarea>
+                            </div>
+                            <div class="btn-group">
+                                <button type="submit" class="btn">添加药品</button>
+                                <button type="reset" class="btn btn-secondary">重置</button>
+                            </div>
+                        </form>
+                        <div id="add-medicine-message"></div>
+                    </div>
+
+                    <!-- 儿童中成药剂量计算器模块 -->
+                    <div id="dosage-calculator" class="module-content">
+                        <h3>儿童中成药剂量计算器</h3>
+                        <div class="calculator-container">
+                            <div class="calculator-grid">
+                                <div class="form-group">
+                                    <label for="child-age">儿童年龄（岁）</label>
+                                    <input type="number" id="child-age" name="childAge" min="0" max="18" step="0.1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="child-weight">儿童体重（kg）</label>
+                                    <input type="number" id="child-weight" name="childWeight" min="0" max="100" step="0.1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="adult-dose">成人剂量</label>
+                                    <input type="text" id="adult-dose" name="adultDose" placeholder="例如：10ml/次" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dose-unit">剂量单位</label>
+                                    <input type="text" id="dose-unit" name="doseUnit" placeholder="例如：ml" required>
+                                </div>
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" class="btn" onclick="calculateDosage()">计算剂量</button>
+                                <button type="button" class="btn btn-secondary" onclick="resetCalculator()">重置</button>
+                            </div>
+                            <div id="calculator-result" class="result-card" style="display: none;">
+                                <h3>计算结果</h3>
+                                <div class="result-value" id="dose-result"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RUCAM肝损伤评估模块 -->
+                    <div id="rucam-assessment" class="module-content">
+                        <h3>RUCAM肝损伤评估</h3>
+                        <div class="calculator-container">
+                            <form id="rucam-form">
+                                <!-- 用药与发病时间关系 -->
+                                <div class="form-group">
+                                    <label>1. 用药与发病时间关系</label>
+                                    <div>
+                                        <label><input type="radio" name="timeRelation" value="+2" required> 用药后5-90天出现症状</label><br>
+                                        <label><input type="radio" name="timeRelation" value="+1"> 用药后<5天或>90天出现症状</label><br>
+                                        <label><input type="radio" name="timeRelation" value="+1"> 停药后<15天出现症状</label><br>
+                                        <label><input type="radio" name="timeRelation" value="0"> 停药后>15天出现症状</label><br>
+                                        <label><input type="radio" name="timeRelation" value="-2"> 无明确时间关系</label>
+                                    </div>
+                                </div>
+
+                                <!-- 停药反应 -->
+                                <div class="form-group">
+                                    <label>2. 停药反应</label>
+                                    <div>
+                                        <label><input type="radio" name="recovery" value="+3" required> 停药后ALT下降>50%或恢复正常</label><br>
+                                        <label><input type="radio" name="recovery" value="+2"> 停药后ALT下降>50%但未恢复正常</label><br>
+                                        <label><input type="radio" name="recovery" value="0"> 停药后ALT下降<50%</label><br>
+                                        <label><input type="radio" name="recovery" value="-2"> 停药后ALT继续升高</label>
+                                    </div>
+                                </div>
+
+                                <!-- 危险因素 -->
+                                <div class="form-group">
+                                    <label>3. 危险因素</label>
+                                    <div>
+                                        <label><input type="radio" name="riskFactors" value="+1" required> 年龄>55岁</label><br>
+                                        <label><input type="radio" name="riskFactors" value="+1"> 饮酒史</label><br>
+                                        <label><input type="radio" name="riskFactors" value="+1"> 妊娠</label><br>
+                                        <label><input type="radio" name="riskFactors" value="+2"> 同时使用其他肝毒性药物</label><br>
+                                        <label><input type="radio" name="riskFactors" value="0"> 无上述危险因素</label>
+                                    </div>
+                                </div>
+
+                                <!-- 伴随用药 -->
+                                <div class="form-group">
+                                    <label>4. 伴随用药</label>
+                                    <div>
+                                        <label><input type="radio" name="concomitantDrugs" value="-1" required> 同时使用已知肝毒性药物</label><br>
+                                        <label><input type="radio" name="concomitantDrugs" value="+1"> 同时使用无肝毒性药物</label><br>
+                                        <label><input type="radio" name="concomitantDrugs" value="0"> 无伴随用药</label>
+                                    </div>
+                                </div>
+
+                                <!-- 其他原因 -->
+                                <div class="form-group">
+                                    <label>5. 其他可能的肝损伤原因</label>
+                                    <div>
+                                        <label><input type="radio" name="otherCauses" value="+2" required> 排除其他已知肝损伤原因</label><br>
+                                        <label><input type="radio" name="otherCauses" value="+1"> 部分排除其他原因</label><br>
+                                        <label><input type="radio" name="otherCauses" value="-2"> 存在其他明确肝损伤原因</label><br>
+                                        <label><input type="radio" name="otherCauses" value="0"> 无法排除其他原因</label>
+                                    </div>
+                                </div>
+
+                                <!-- 药物既往肝毒性 -->
+                                <div class="form-group">
+                                    <label>6. 药物既往肝毒性信息</label>
+                                    <div>
+                                        <label><input type="radio" name="previousHepatotoxicity" value="+2" required> 药物有明确肝毒性记录</label><br>
+                                        <label><input type="radio" name="previousHepatotoxicity" value="+1"> 药物有可疑肝毒性记录</label><br>
+                                        <label><input type="radio" name="previousHepatotoxicity" value="0"> 药物无肝毒性记录</label>
+                                    </div>
+                                </div>
+
+                                <!-- 再用药反应 -->
+                                <div class="form-group">
+                                    <label>7. 再用药反应</label>
+                                    <div>
+                                        <label><input type="radio" name="rechallenge" value="+3" required> 再用药后ALT升高>2倍正常上限</label><br>
+                                        <label><input type="radio" name="rechallenge" value="+1"> 再用药后ALT轻度升高</label><br>
+                                        <label><input type="radio" name="rechallenge" value="-3"> 再用药后无ALT升高</label><br>
+                                        <label><input type="radio" name="rechallenge" value="0"> 未进行再用药</label>
+                                    </div>
+                                </div>
+
+                                <div class="btn-group">
+                                    <button type="button" class="btn" onclick="calculateRUCAM()">计算评分</button>
+                                    <button type="reset" class="btn btn-secondary">重置</button>
+                                </div>
+                            </form>
+                            <div id="rucam-result" class="result-card" style="display: none;">
+                                <h3>评估结果</h3>
+                                <div class="result-value" id="rucam-score"></div>
+                                <div id="rucam-interpretation" style="margin-top: 1rem;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 儿童中成药智能体模块 -->
+                    <div id="ai-agent" class="module-content">
+                        <h3>儿童中成药智能体</h3>
+                        <div class="chat-container">
+                            <div class="chat-messages" id="chat-messages">
+                                <!-- 聊天消息将通过JavaScript动态加载 -->
+                                <div class="message-bubble agent">
+                                    <div class="message-content">您好！我是儿童中成药智能体，有什么可以帮助您的？</div>
+                                    <div class="message-time">刚刚</div>
+                                </div>
+                            </div>
+                            <div class="chat-input">
+                                <input type="text" id="chat-input" placeholder="请输入您的问题..." maxlength="500">
+                                <button type="button" class="btn" onclick="sendMessage()">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="ai-agent-message"></div>
+                    </div>
+
+                    <!-- 药品数据分析模块 -->
+                    <div id="data-analysis" class="module-content">
+                        <h3>药品数据分析</h3>
+                        <div class="charts-container">
+                            <div class="chart-card">
+                                <h4>药品分类统计</h4>
+                                <div id="category-chart">
+                                    <!-- 图表将通过JavaScript动态生成 -->
+                                    <div style="text-align: center; padding: 2rem; color: #666;">加载中...</div>
+                                </div>
+                            </div>
+                            <div class="chart-card">
+                                <h4>药品数量趋势</h4>
+                                <div id="trend-chart">
+                                    <!-- 图表将通过JavaScript动态生成 -->
+                                    <div style="text-align: center; padding: 2rem; color: #666;">加载中...</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="analysis-message"></div>
+                    </div>
+
+                    <!-- 欢迎模块 -->
+                    <div id="welcome" class="module-content">
+                        <h3>欢迎使用童智药嘱</h3>
+                        <p>童智药嘱是一款专业的儿童药品管理系统，致力于为家长和医护人员提供安全、便捷的儿童用药指导和管理服务。</p>
+                        <p>我们的系统包含以下功能模块：</p>
+                        <ul style="margin: 1rem 0 1rem 2rem;">
+                            <li><strong>药品列表</strong>：查看和管理所有药品信息</li>
+                            <li><strong>添加药品</strong>：录入新的药品信息</li>
+                            <li><strong>剂量计算器</strong>：根据儿童年龄和体重计算用药剂量</li>
+                            <li><strong>RUCAM评估</strong>：评估药物性肝损伤的可能性</li>
+                            <li><strong>智能用药指导</strong>：获取智能用药建议</li>
+                            <li><strong>药品数据分析</strong>：分析药品使用情况</li>
+                        </ul>
+                        <p>请点击上方的功能模块卡片开始使用！</p>
+                    </div>
+                </div>
+
+                <!-- 关于我们 -->
+                <div class="card" id="about">
+                    <h2>关于我们</h2>
+                    <p>童智药嘱团队致力于为儿童用药安全提供专业的解决方案。我们的系统基于最新的医学研究和临床实践，结合人工智能技术，为用户提供准确、便捷的用药指导和管理服务。</p>
+                    <p>我们的使命是通过技术手段，降低儿童用药风险，保障儿童用药安全，让每个孩子都能得到科学、合理的用药指导。</p>
+                </div>
+
+                <!-- 联系我们 -->
+                <div class="card" id="contact">
+                    <h2>联系我们</h2>
+                    <p>如果您有任何问题或建议，欢迎随时联系我们：</p>
+                    <p>Email: contact@tongzhiyaozhu.com</p>
+                    <p>电话: 400-123-4567</p>
+                    <p>地址: 北京市朝阳区科技园A座1001室</p>
+                </div>
+            </div>
+        </main>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2026 童智药嘱. 保留所有权利.</p>
+            <p>童智药嘱 - 专业的儿童药品管理系统</p>
+        </div>
+    </footer>
+
+    <script>
+        // API基础URL
+        const API_BASE_URL = 'http://localhost:5000/api';
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // 初始化事件监听器
+            initEventListeners();
+
+            // 页面加载完成提示
+            console.log('童智药嘱页面加载完成');
+        });
+
+        // 初始化事件监听器
+        function initEventListeners() {
+            // 添加药品表单提交事件
+            const addMedicineForm = document.getElementById('add-medicine-form');
+            if (addMedicineForm) {
+                addMedicineForm.addEventListener('submit', handleAddMedicine);
+            }
+
+            // 聊天输入框回车事件
+            const chatInput = document.getElementById('chat-input');
+            if (chatInput) {
+                chatInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendMessage();
+                    }
+                });
+            }
+        }
+
+        // 显示指定模块
+        function showModule(moduleId) {
+            // 隐藏所有模块
+            document.querySelectorAll('.module-content').forEach(module => {
+                module.classList.remove('active');
+            });
+
+            // 显示指定模块
+            const targetModule = document.getElementById(moduleId);
+            if (targetModule) {
+                targetModule.classList.add('active');
+            }
+
+            // 如果是药品列表模块，加载药品数据
+            if (moduleId === 'medicines') {
+                loadMedicines();
+            }
+            // 如果是数据分析模块，加载数据
+            else if (moduleId === 'data-analysis') {
+                loadDataAnalysis();
+            }
+        }
+
+        // 显示消息
+        function showMessage(elementId, message, type = 'success') {
+            const messageElement = document.getElementById(elementId);
+            if (messageElement) {
+                messageElement.innerHTML = `<div class="message ${type}">${message}</div>`;
+                setTimeout(() => {
+                    messageElement.innerHTML = '';
+                }, 5000);
+            }
+        }
+
+        // 药品列表功能
+        async function loadMedicines() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/medicines`);
+                if (!response.ok) {
+                    throw new Error('获取药品列表失败');
+                }
+                const data = await response.json();
+                displayMedicines(data.medicines);
+            } catch (error) {
+                console.error('加载药品列表失败:', error);
+                showMessage('medicines-message', '加载药品列表失败，请稍后重试', 'error');
+            }
+        }
+
+        function displayMedicines(medicines) {
+            const tbody = document.getElementById('medicines-tbody');
+            if (!tbody) return;
+
+            tbody.innerHTML = '';
+
+            if (medicines.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: #666;">暂无药品数据</td></tr>';
+                return;
+            }
+
+            medicines.forEach(medicine => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${medicine.id}</td>
+                    <td>${medicine.name.generic || '-'}</td>
+                    <td>${medicine.name.brand.join('、') || '-'}</td>
+                    <td>${medicine.category || '-'}</td>
+                    <td>${medicine.specification || '-'}</td>
+                    <td>${medicine.manufacturer || '-'}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // 添加药品功能
+        async function handleAddMedicine(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+
+            // 构建药品数据对象
+            const medicineData = {
+                name: {
+                    generic: formData.get('genericName'),
+                    brand: formData.get('brandName') ? [formData.get('brandName')] : []
+                },
+                category: formData.get('category'),
+                specification: formData.get('specification'),
+                manufacturer: formData.get('manufacturer'),
+                indications: formData.get('indications') ? formData.get('indications').split(';').map(item => item.trim()) : [],
+                ingredients: [],
+                dosage: '',
+                adverseReactions: [],
+                contraindications: [],
+                precautions: [],
+                drugInteractions: [],
+                shelfLife: 24,
+                approvalNumber: '',
+                storageConditions: ''
+            };
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/medicines`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(medicineData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('添加药品失败');
+                }
+
+                const newMedicine = await response.json();
+                showMessage('add-medicine-message', '药品添加成功！', 'success');
+                form.reset();
+            } catch (error) {
+                console.error('添加药品失败:', error);
+                showMessage('add-medicine-message', '添加药品失败，请稍后重试', 'error');
+            }
+        }
+
+        // 儿童中成药剂量计算器功能
+        function calculateDosage() {
+            const age = parseFloat(document.getElementById('child-age').value);
+            const weight = parseFloat(document.getElementById('child-weight').value);
+            const adultDose = document.getElementById('adult-dose').value;
+            const unit = document.getElementById('dose-unit').value;
+
+            if (!age || !weight || !adultDose || !unit) {
+                alert('请填写完整的计算参数');
+                return;
+            }
+
+            // 提取成人剂量数值
+            const adultDoseValue = parseFloat(adultDose.match(/\d+/)[0]);
+            if (isNaN(adultDoseValue)) {
+                alert('请输入有效的成人剂量');
+                return;
+            }
+
+            // 计算儿童剂量（简化版，实际应根据药品特性调整）
+            let childDose;
+            if (age < 1) {
+                // 新生儿和婴儿：根据体重计算
+                childDose = (weight / 60) * adultDoseValue;
+            } else if (age < 6) {
+                // 幼儿：根据年龄和体重综合计算
+                childDose = (age / 12 + weight / 120) * adultDoseValue;
+            } else if (age < 12) {
+                // 儿童：根据年龄计算
+                childDose = (age / 18) * adultDoseValue;
+            } else {
+                // 青少年：接近成人剂量
+                childDose = adultDoseValue * 0.8;
+            }
+
+            // 保留一位小数
+            childDose = Math.round(childDose * 10) / 10;
+
+            // 显示结果
+            const resultElement = document.getElementById('dose-result');
+            const calculatorResult = document.getElementById('calculator-result');
+            resultElement.textContent = `${childDose} ${unit}`;
+            calculatorResult.style.display = 'block';
+        }
+
+        function resetCalculator() {
+            document.getElementById('child-age').value = '';
+            document.getElementById('child-weight').value = '';
+            document.getElementById('adult-dose').value = '';
+            document.getElementById('dose-unit').value = '';
+            document.getElementById('calculator-result').style.display = 'none';
+        }
+
+        // RUCAM肝损伤评估功能
+        function calculateRUCAM() {
+            const form = document.getElementById('rucam-form');
+            const formData = new FormData(form);
+
+            // 计算总分
+            let totalScore = 0;
+            const questions = ['timeRelation', 'recovery', 'riskFactors', 'concomitantDrugs', 'otherCauses', 'previousHepatotoxicity', 'rechallenge'];
+
+            for (const question of questions) {
+                const value = formData.get(question);
+                if (value) {
+                    totalScore += parseInt(value);
+                }
+            }
+
+            // 评估结果解读
+            let interpretation;
+            if (totalScore >= 9) {
+                interpretation = '高度可能（Highly probable）';
+            } else if (totalScore >= 6) {
+                interpretation = '很可能（Probable）';
+            } else if (totalScore >= 3) {
+                interpretation = '可能（Possible）';
+            } else if (totalScore >= 1) {
+                interpretation = '不太可能（Unlikely）';
+            } else {
+                interpretation = '排除（Excluded）';
+            }
+
+            // 显示结果
+            const scoreElement = document.getElementById('rucam-score');
+            const interpretationElement = document.getElementById('rucam-interpretation');
+            const rucamResult = document.getElementById('rucam-result');
+
+            scoreElement.textContent = `总分: ${totalScore}`;
+            interpretationElement.textContent = `评估结果: ${interpretation}`;
+            rucamResult.style.display = 'block';
+        }
+
+        // 儿童中成药智能体功能
+        async function sendMessage() {
+            const chatInput = document.getElementById('chat-input');
+            const message = chatInput.value.trim();
+
+            if (!message) return;
+
+            // 添加用户消息到聊天记录
+            addMessageToChat(message, 'user');
+            chatInput.value = '';
+
+            try {
+                // 发送消息到后端
+                const response = await fetch(`${API_BASE_URL}/agent/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ question: message })
+                });
+
+                if (!response.ok) {
+                    throw new Error('获取智能体回复失败');
+                }
+
+                const data = await response.json();
+                // 添加智能体回复到聊天记录
+                addMessageToChat(data.answer, 'agent');
+            } catch (error) {
+                console.error('发送消息失败:', error);
+                addMessageToChat('抱歉，智能体暂时无法回答您的问题，请稍后重试', 'agent');
+            }
+        }
+
+        function addMessageToChat(message, sender) {
+            const chatMessages = document.getElementById('chat-messages');
+            const messageBubble = document.createElement('div');
+            messageBubble.className = `message-bubble ${sender}`;
+
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            messageContent.textContent = message;
+
+            const messageTime = document.createElement('div');
+            messageTime.className = 'message-time';
+            messageTime.textContent = new Date().toLocaleTimeString();
+
+            messageBubble.appendChild(messageContent);
+            messageBubble.appendChild(messageTime);
+            chatMessages.appendChild(messageBubble);
+
+            // 滚动到底部
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // 药品数据分析功能
+        async function loadDataAnalysis() {
+            try {
+                // 获取药品数据
+                const response = await fetch(`${API_BASE_URL}/medicines`);
+                if (!response.ok) {
+                    throw new Error('获取药品数据失败');
+                }
+
+                const data = await response.json();
+                const medicines = data.medicines;
+
+                // 生成药品分类统计
+                generateCategoryStats(medicines);
+                // 生成药品数量趋势（简化版，使用静态数据）
+                generateTrendStats();
+            } catch (error) {
+                console.error('加载数据分析失败:', error);
+                showMessage('analysis-message', '加载数据分析失败，请稍后重试', 'error');
+            }
+        }
+
+        function generateCategoryStats(medicines) {
+            // 统计各分类药品数量
+            const categoryStats = {};
+            medicines.forEach(medicine => {
+                const category = medicine.category || '未分类';
+                categoryStats[category] = (categoryStats[category] || 0) + 1;
+            });
+
+            const categoryChart = document.getElementById('category-chart');
+            // 简化版：使用文本显示统计结果
+            let html = '<h5>药品分类统计</h5>';
+            html += '<ul style="list-style-type: none; padding: 0;">';
+            for (const [category, count] of Object.entries(categoryStats)) {
+                html += `<li style="margin: 0.5rem 0; padding: 0.5rem; background: #f5f7fa; border-radius: 4px;">${category}: ${count}种</li>`;
+            }
+            html += '</ul>';
+            categoryChart.innerHTML = html;
+        }
+
+        function generateTrendStats() {
+            const trendChart = document.getElementById('trend-chart');
+            // 简化版：使用静态数据显示趋势
+            const html = `
+                <h5>药品数量趋势</h5>
+                <div style="background: #f5f7fa; padding: 1rem; border-radius: 4px;">
+                    <p>由于系统刚初始化，暂无历史数据趋势</p>
+                    <p style="margin-top: 1rem;">当前药品总数：<strong>0</strong>种</p>
+                </div>
+            `;
+            trendChart.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1398 @@
+/* 全局样式 */
+:root {
+  --primary-color: #1890ff;
+  --secondary-color: #52c41a;
+  --danger-color: #ff4d4f;
+  --warning-color: #faad14;
+  --text-color: #333;
+  --light-text: #666;
+  --border-color: #e8e8e8;
+  --background-color: #f5f5f5;
+  --card-background: #fff;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  --gradient-primary: linear-gradient(135deg, var(--primary-color), #2d8bff);
+  --gradient-secondary: linear-gradient(135deg, var(--secondary-color), #73d13d);
+  --container-padding: 24px;
+  --border-radius: 12px;
+  --transition: all 0.3s ease;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  line-height: 1.6;
+}
+
+/* 容器样式 */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* 标题样式 */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-color);
+  margin-bottom: 16px;
+}
+
+/* 按钮样式 */
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #40a9ff;
+}
+
+.btn-secondary {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #73d13d;
+}
+
+.btn-danger {
+  background-color: var(--danger-color);
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #ff7875;
+}
+
+/* 表单样式 */
+form {
+  background-color: var(--card-background);
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+/* 卡片样式 */
+.card {
+  background-color: var(--card-background);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+/* 网格布局 */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  
+  form {
+    padding: 16px;
+  }
+  
+  .container {
+    padding: 0 10px;
+  }
+}
+
+/* 隐藏标题样式 */
+.hidden-title {
+  display: none !important;
+}
+
+/* 表格样式 */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--card-background);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+th, td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+th {
+  background-color: #fafafa;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+/* 搜索和筛选区域 */
+.search-bar {
+  background-color: var(--card-background);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+
+.search-bar input, .search-bar select {
+  flex: 1;
+  min-width: 200px;
+}
+
+/* 导航栏样式 */
+.navbar {
+  background-color: var(--card-background);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 16px 0;
+  margin-bottom: 32px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-logo {
+  margin: 0;
+  font-size: 28px;
+  color: var(--primary-color);
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: transform var(--transition);
+}
+
+.nav-logo:hover {
+  transform: scale(1.05);
+}
+
+/* 响应式设计，确保标题在移动设备上清晰可见 */
+@media (max-width: 768px) {
+  .nav-logo {
+    font-size: 24px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+  }
+  
+  .navbar .container {
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+  }
+  
+  .nav-links {
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-logo {
+    font-size: 20px;
+    max-width: 150px;
+  }
+  
+  .navbar {
+    padding: 12px 0;
+    margin-bottom: 24px;
+  }
+  
+  .nav-links {
+    gap: 12px;
+  }
+  
+  .nav-link {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+}
+
+.nav-links {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+/* 导航分组样式 */
+.nav-group {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  position: relative;
+}
+
+/* 导航分组之间的分隔线 */
+.nav-group:not(:last-child)::after {
+  content: '';
+  width: 2px;
+  height: 24px;
+  background-color: var(--border-color);
+  margin-left: 16px;
+  border-radius: 1px;
+}
+
+/* 响应式设计中的导航分组样式 */
+@media (max-width: 768px) {
+  .nav-group {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .nav-group:not(:last-child)::after {
+    display: none;
+  }
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: 600;
+  font-size: 16px;
+  transition: all var(--transition);
+  padding: 8px 16px;
+  border-radius: 8px;
+  position: relative;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--primary-color);
+  background-color: rgba(24, 144, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+/* 功能模块容器样式 */
+.feature-container {
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  padding: var(--container-padding);
+  margin-bottom: 32px;
+  border: 1px solid var(--border-color);
+  transition: all var(--transition);
+}
+
+.feature-container:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+}
+
+/* 页面标题样式 */
+.page-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 3px solid var(--primary-color);
+  display: inline-block;
+}
+
+/* 按钮样式增强 */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(24, 144, 255, 0.4);
+}
+
+.btn-secondary {
+  background: var(--gradient-secondary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(82, 196, 26, 0.3);
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(82, 196, 26, 0.4);
+}
+
+.btn-danger {
+  background-color: var(--danger-color);
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 77, 79, 0.3);
+}
+
+.btn-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 77, 79, 0.4);
+}
+
+/* 搜索栏样式增强 */
+.search-bar {
+  background-color: var(--card-background);
+  padding: 24px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  margin-bottom: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+  border: 1px solid var(--border-color);
+}
+
+/* 表格样式增强 */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color);
+}
+
+/* 药品卡片样式增强 */
+.medicine-card {
+  transition: all var(--transition);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.medicine-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  border-color: var(--primary-color);
+}
+
+/* 表单样式增强 */
+form {
+  background-color: var(--card-background);
+  padding: 32px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color);
+}
+
+/* 输入框样式增强 */
+input, textarea, select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all var(--transition);
+  background-color: white;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(24, 144, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+/* 分页样式增强 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 32px;
+  gap: 12px;
+}
+
+.pagination button {
+  min-width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background-color: white;
+  color: var(--text-color);
+  font-weight: 600;
+  transition: all var(--transition);
+  cursor: pointer;
+}
+
+.pagination button:hover:not(:disabled) {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.pagination button.active {
+  background: var(--gradient-primary);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 药品卡片样式 */
+.medicine-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.medicine-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.medicine-card h3 {
+  margin-top: 0;
+  color: var(--primary-color);
+}
+
+.medicine-info {
+  margin-bottom: 12px;
+}
+
+.medicine-info strong {
+  display: inline-block;
+  width: 100px;
+  color: var(--light-text);
+}
+
+/* 操作按钮组 */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+/* URL验证反馈样式 */
+.url-validation {
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.url-validation.valid {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.url-validation.invalid {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.url-validation.info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+}
+
+/* URL提示样式 */
+.url-hint {
+  font-size: 12px;
+  color: #6c757d;
+  margin-top: 4px;
+}
+
+/* 分页样式 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 24px;
+  gap: 8px;
+}
+
+.pagination button {
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination button.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* 加载状态 */
+.loading {
+  text-align: center;
+  padding: 40px 0;
+  color: var(--light-text);
+}
+
+/* 错误状态 */
+.error {
+  text-align: center;
+  padding: 40px 0;
+  color: var(--danger-color);
+}
+
+/* 计算器共享样式 */
+:root {
+  --primary: #4a9eff;
+  --primary-light: #e3f2fd;
+  --secondary: #ff9e4a;
+  --secondary-light: #fff3e0;
+  --accent: #6fcf97;
+  --danger: #ff6b6b;
+  --text: #333;
+  --text-light: #666;
+  --light: #f8f9fa;
+  --white: #ffffff;
+  --shadow: rgba(0, 0, 0, 0.1);
+  --success: #52c41a;
+  --warning: #faad14;
+  --gray: #f0f2f5;
+}
+
+/* 响应式网格布局 */
+@media (min-width: 768px) {
+  .grid-cols-1.md\:grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* RUCAM计算器样式 */
+.rucam-calculator {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.page-header {
+  text-align: center;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, var(--primary), #2d8bff);
+  color: white;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  box-shadow: 0 5px 15px rgba(74, 158, 255, 0.3);
+}
+
+.page-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: white;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.calculator-content {
+  background-color: var(--white);
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.form-section {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--primary-light);
+}
+
+.form-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.section-title {
+  color: var(--primary);
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.1);
+  outline: none;
+}
+
+.r-value-section {
+  background-color: var(--primary-light);
+  padding: 25px;
+  border-radius: 12px;
+  border: 2px solid rgba(74, 158, 255, 0.2);
+}
+
+.r-value-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.r-value-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.r-value-label {
+  font-weight: 600;
+  color: var(--text-light);
+  font-size: 1rem;
+}
+
+.r-value-result {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.score-item {
+  margin-bottom: 25px;
+  background-color: var(--light);
+  padding: 20px;
+  border-radius: 10px;
+  border-left: 4px solid var(--primary);
+}
+
+.score-item:last-child {
+  margin-bottom: 0;
+}
+
+.score-title {
+  font-size: 1.2rem;
+  color: var(--primary);
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background-color: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.radio-option:hover {
+  border-color: var(--primary);
+  background-color: var(--primary-light);
+}
+
+.radio-option input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.radio-option input[type="radio"]:checked + .radio-text {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.radio-text {
+  font-size: 1rem;
+  color: var(--text);
+  transition: color 0.3s ease;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  margin: 30px 0;
+  justify-content: center;
+}
+
+.action-buttons .btn {
+  padding: 14px 30px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background: linear-gradient(to right, var(--primary), #2d8bff);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(74, 158, 255, 0.4);
+}
+
+.btn-secondary {
+  background-color: var(--gray);
+  color: var(--text);
+  border: 2px solid var(--gray);
+}
+
+.btn-secondary:hover {
+  background-color: #e6e8eb;
+  border-color: #e6e8eb;
+  transform: translateY(-2px);
+}
+
+.result-section {
+  background-color: var(--primary-light);
+  border-radius: 15px;
+  padding: 30px;
+  border: 2px solid rgba(74, 158, 255, 0.3);
+}
+
+.result-card {
+  background-color: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.result-grid {
+  display: grid;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: var(--light);
+  border-radius: 8px;
+  border-left: 4px solid var(--primary);
+}
+
+.result-label {
+  font-weight: 600;
+  color: var(--text-light);
+  font-size: 1.1rem;
+}
+
+.result-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.text-gray-600 {
+  color: #6b7280;
+}
+
+.text-yellow-600 {
+  color: #d97706;
+}
+
+.text-orange-500 {
+  color: #f97316;
+}
+
+.text-red-500 {
+  color: #ef4444;
+}
+
+.text-red-700 {
+  color: #b91c1c;
+}
+
+.score-breakdown {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 2px solid var(--primary-light);
+}
+
+.score-breakdown h4 {
+  color: var(--primary);
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+.score-breakdown ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.score-breakdown li {
+  padding: 10px 16px;
+  background-color: var(--light);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  color: var(--text);
+  border-left: 3px solid var(--primary);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .rucam-calculator {
+    padding: 10px;
+  }
+
+  .page-header {
+    padding: 20px 15px;
+    margin-bottom: 20px;
+  }
+
+  .page-header h1 {
+    font-size: 2rem;
+  }
+
+  .calculator-content {
+    padding: 20px;
+  }
+
+  .form-section {
+    margin-bottom: 25px;
+  }
+
+  .r-value-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .result-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .action-buttons .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+}
+
+.dosage-calculator {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.dosage-calculator header {
+  text-align: center;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, var(--primary), #2d8bff);
+  color: white;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  box-shadow: 0 5px 15px rgba(74, 158, 255, 0.3);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.logo .fa-icon {
+  font-size: 2.8rem;
+}
+
+.dosage-calculator header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: white;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.warning-box {
+  background-color: #fff8e1;
+  border-left: 5px solid #ffc107;
+  padding: 15px;
+  margin: 20px 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.warning-box .fa-icon {
+  color: #ff9800;
+  margin-right: 10px;
+}
+
+.calculator-types {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.calc-type {
+  background-color: var(--white);
+  border-radius: 12px;
+  padding: 25px 20px;
+  text-align: center;
+  box-shadow: 0 5px 15px var(--shadow);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+  border: 3px solid transparent;
+}
+
+.calc-type:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.calc-type.active {
+  border-color: var(--primary);
+  background-color: var(--primary-light);
+}
+
+.calc-icon {
+  width: 70px;
+  height: 70px;
+  background-color: var(--primary-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px;
+  font-size: 1.8rem;
+  color: var(--primary);
+}
+
+.calc-type h3 {
+  margin-bottom: 10px;
+  color: var(--primary);
+}
+
+.calculator-container {
+  background-color: var(--white);
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  margin-bottom: 40px;
+}
+
+.calc-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--primary-light);
+}
+
+.calc-header .fa-icon {
+  font-size: 1.8rem;
+  color: var(--primary);
+  margin-right: 15px;
+}
+
+.calc-header h2 {
+  color: var(--primary);
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.input-with-unit {
+  display: flex;
+  align-items: center;
+}
+
+.input-with-unit input,
+.input-with-unit select {
+  flex: 1;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px 0 0 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.input-with-unit input:focus,
+.input-with-unit select:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+.unit {
+  background-color: var(--primary-light);
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-left: none;
+  border-radius: 0 8px 8px 0;
+  color: var(--primary);
+  font-weight: 600;
+  min-width: 60px;
+  text-align: center;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.calculate-btn {
+  background: linear-gradient(to right, var(--primary), #2d8bff);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.3s, box-shadow 0.3s;
+  margin-bottom: 25px;
+}
+
+.calculate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(74, 158, 255, 0.4);
+}
+
+.result-box {
+  background-color: var(--primary-light);
+  border-radius: 10px;
+  padding: 25px;
+  margin-top: 20px;
+}
+
+.result-box h3 {
+  color: var(--primary);
+  margin-bottom: 20px;
+  font-size: 1.3rem;
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(74, 158, 255, 0.2);
+}
+
+.result-item:last-child {
+  border-bottom: none;
+}
+
+.result-label {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.result-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* 儿童中成药口服制剂计算器特有样式 */
+.chinese-medicine-calculator {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.chinese-medicine-calculator header {
+  text-align: center;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, var(--primary), #2d8bff);
+  color: white;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  box-shadow: 0 5px 15px rgba(74, 158, 255, 0.3);
+}
+
+.chinese-medicine-calculator header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: white;
+}
+
+.form-content {
+  margin-bottom: 30px;
+}
+
+.formula-input-container {
+  margin-bottom: 10px;
+}
+
+.formula-input-container input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'Courier New', Courier, monospace;
+  transition: border-color 0.3s;
+}
+
+.formula-input-container input:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+.formula-input-container input.error {
+  border-color: var(--danger);
+}
+
+.variables-section {
+  background-color: var(--light);
+  padding: 20px;
+  border-radius: 8px;
+  margin: 25px 0;
+}
+
+.variables-section h3 {
+  margin-bottom: 15px;
+  color: var(--primary);
+  font-size: 1.2rem;
+}
+
+.variables-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.variable-item {
+  margin-bottom: 10px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkbox-custom {
+  position: relative;
+  height: 20px;
+  width: 20px;
+  background-color: #e0e0e0;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px;
+  transition: all 0.3s ease;
+}
+
+.checkbox-label:hover input ~ .checkbox-custom {
+  background-color: #f0f0f0;
+}
+
+.checkbox-label input:checked ~ .checkbox-custom {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.checkbox-custom:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkbox-label input:checked ~ .checkbox-custom:after {
+  display: block;
+}
+
+.checkbox-label .checkbox-custom:after {
+  left: 7px;
+  top: 3px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.variable-name {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.formula-help {
+  background-color: #e7f3ff;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 25px;
+  border-left: 4px solid var(--primary);
+}
+
+.formula-help h4 {
+  margin-bottom: 15px;
+  color: var(--primary);
+  font-size: 1.1rem;
+}
+
+.formula-help ul {
+  margin-left: 20px;
+}
+
+.formula-help li {
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.error-message {
+  color: var(--danger);
+  font-size: 0.9rem;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.error-message .fa-icon {
+  font-size: 0.8rem;
+}
+
+.input-with-unit input.error,
+.input-with-unit select.error {
+  border-color: var(--danger);
+}
+
+.result-value.formula-result {
+  font-family: 'Courier New', Courier, monospace;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.result-box h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
