@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
+const mysql = require('mysql2/promise');
 const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
@@ -8,6 +9,52 @@ require('dotenv').config();
 // 导入数据库配置
 const { initDatabase } = require('./db');
 let db = null;
+
+const useMySQL = process.env.DB_TYPE === 'mysql';
+
+let mysqlPool = null;
+
+const initMySQL = async () => {
+  mysqlPool = await mysql.createPool({
+    host: process.env.MYSQL_HOST || 'localhost',
+    port: process.env.MYSQL_PORT ? parseInt(process.env.MYSQL_PORT) : 3306,
+    user: process.env.MYSQL_USER || 'root',
+    password: process.env.MYSQL_PASSWORD || '',
+    database: process.env.MYSQL_DATABASE || 'test',
+    waitForConnections: true,
+    connectionLimit: 50,
+    queueLimit: 0,
+    charset: 'utf8mb4_general_ci'
+  });
+
+  await mysqlPool.query(
+    `CREATE TABLE IF NOT EXISTS medicines (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      data LONGTEXT NOT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`
+  );
+};
+
+const migrateLowdbToMySQL = async () => {
+  if (!useMySQL || !mysqlPool || !db) return;
+  await db.read();
+  const medicines = db.data?.medicines || [];
+  if (medicines.length === 0) {
+    logMessage('[MySQL] 本地JSON中无药品数据，无需迁移', 'info');
+    return;
+  }
+  const [rows] = await mysqlPool.query('SELECT COUNT(*) AS cnt FROM medicines');
+  if (rows[0].cnt > 0) {
+    logMessage('[MySQL] medicines表已有数据，跳过迁移', 'info');
+    return;
+  }
+  for (const medicine of medicines) {
+    await mysqlPool.query('INSERT INTO medicines (data) VALUES (?)', [
+      JSON.stringify(medicine)
+    ]);
+  }
+  logMessage(`[MySQL] 已从本地JSON迁移 ${medicines.length} 条药品数据到MySQL`, 'info');
+};
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -230,14 +277,28 @@ app.post('/api/auth/logout', authenticateToken, (req, res) => {
 // 获取所有药品
 app.get('/api/medicines', async (req, res) => {
   try {
-    await db.read();
-    const medicines = db.data.medicines;
-    res.json({
-      medicines: medicines,
-      page: 1,
-      totalPages: 1
-    });
-    logMessage(`获取所有药品，共返回 ${medicines.length} 条记录`, 'info');
+    if (useMySQL && mysqlPool) {
+      const [rows] = await mysqlPool.query('SELECT id, data FROM medicines ORDER BY id ASC');
+      const medicines = rows.map(row => {
+        const data = JSON.parse(row.data);
+        return { id: row.id, ...data };
+      });
+      res.json({
+        medicines,
+        page: 1,
+        totalPages: 1
+      });
+      logMessage(`[MySQL] 获取所有药品，共返回 ${medicines.length} 条记录`, 'info');
+    } else {
+      await db.read();
+      const medicines = db.data.medicines;
+      res.json({
+        medicines,
+        page: 1,
+        totalPages: 1
+      });
+      logMessage(`获取所有药品，共返回 ${medicines.length} 条记录`, 'info');
+    }
   } catch (error) {
     logMessage(`获取药品列表失败: ${error.message}`, 'error');
     res.status(500).json({ message: '获取药品列表失败' });
@@ -247,10 +308,18 @@ app.get('/api/medicines', async (req, res) => {
 // 获取药品分类
 app.get('/api/medicines/categories', async (req, res) => {
   try {
-    await db.read();
-    const categories = [...new Set(db.data.medicines.map(m => m.category))];
-    res.json(categories);
-    logMessage(`获取药品分类，共返回 ${categories.length} 个分类`, 'info');
+    if (useMySQL && mysqlPool) {
+      const [rows] = await mysqlPool.query('SELECT data FROM medicines');
+      const all = rows.map(r => JSON.parse(r.data));
+      const categories = [...new Set(all.map(m => m.category).filter(Boolean))];
+      res.json(categories);
+      logMessage(`[MySQL] 获取药品分类，共返回 ${categories.length} 个分类`, 'info');
+    } else {
+      await db.read();
+      const categories = [...new Set(db.data.medicines.map(m => m.category))];
+      res.json(categories);
+      logMessage(`获取药品分类，共返回 ${categories.length} 个分类`, 'info');
+    }
   } catch (error) {
     logMessage(`获取药品分类失败: ${error.message}`, 'error');
     res.status(500).json({ message: '获取药品分类失败' });
@@ -310,15 +379,27 @@ app.get('/api/medicines/export', async (req, res) => {
 // 获取单个药品
 app.get('/api/medicines/:id', async (req, res) => {
   try {
-    await db.read();
     const id = parseInt(req.params.id);
-    const medicine = db.data.medicines.find(m => m.id === id);
-    if (medicine) {
+    if (useMySQL && mysqlPool) {
+      const [rows] = await mysqlPool.query('SELECT id, data FROM medicines WHERE id = ?', [id]);
+      if (rows.length === 0) {
+        logMessage(`[MySQL] 药品ID: ${id} 未找到`, 'warn');
+        return res.status(404).json({ message: '药品未找到' });
+      }
+      const data = JSON.parse(rows[0].data);
+      const medicine = { id: rows[0].id, ...data };
       res.json(medicine);
-      logMessage(`获取药品ID: ${id} 成功`, 'info');
+      logMessage(`[MySQL] 获取药品ID: ${id} 成功`, 'info');
     } else {
-      logMessage(`药品ID: ${id} 未找到`, 'warn');
-      res.status(404).json({ message: '药品未找到' });
+      await db.read();
+      const medicine = db.data.medicines.find(m => m.id === id);
+      if (medicine) {
+        res.json(medicine);
+        logMessage(`获取药品ID: ${id} 成功`, 'info');
+      } else {
+        logMessage(`药品ID: ${id} 未找到`, 'warn');
+        res.status(404).json({ message: '药品未找到' });
+      }
     }
   } catch (error) {
     logMessage(`获取单个药品失败: ${error.message}`, 'error');
@@ -329,23 +410,35 @@ app.get('/api/medicines/:id', async (req, res) => {
 // 添加药品
 app.post('/api/medicines', async (req, res) => {
   try {
-    await db.read();
-    const medicines = db.data.medicines;
-    
-    // 生成新的ID
-    const newId = medicines.length > 0 ? Math.max(...medicines.map(m => m.id)) + 1 : 1;
-    
-    const newMedicine = {
-      id: newId,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      ...req.body
-    };
-    
-    medicines.push(newMedicine);
-    await db.write();
-    res.status(201).json(newMedicine);
-    logMessage(`添加药品成功: ${newMedicine.name.generic}`, 'info');
+    const now = new Date().toISOString();
+    if (useMySQL && mysqlPool) {
+      const payload = {
+        createdAt: now,
+        updatedAt: now,
+        ...req.body
+      };
+      const [result] = await mysqlPool.query(
+        'INSERT INTO medicines (data) VALUES (?)',
+        [JSON.stringify(payload)]
+      );
+      const newMedicine = { id: result.insertId, ...payload };
+      res.status(201).json(newMedicine);
+      logMessage(`[MySQL] 添加药品成功: ${newMedicine.name?.generic || ''}`, 'info');
+    } else {
+      await db.read();
+      const medicines = db.data.medicines;
+      const newId = medicines.length > 0 ? Math.max(...medicines.map(m => m.id)) + 1 : 1;
+      const newMedicine = {
+        id: newId,
+        createdAt: now,
+        updatedAt: now,
+        ...req.body
+      };
+      medicines.push(newMedicine);
+      await db.write();
+      res.status(201).json(newMedicine);
+      logMessage(`添加药品成功: ${newMedicine.name.generic}`, 'info');
+    }
   } catch (error) {
     logMessage(`添加药品失败: ${error.message}`, 'error');
     res.status(500).json({ message: '添加药品失败' });
@@ -355,22 +448,44 @@ app.post('/api/medicines', async (req, res) => {
 // 更新药品
 app.put('/api/medicines/:id', async (req, res) => {
   try {
-    await db.read();
     const id = parseInt(req.params.id);
-    const index = db.data.medicines.findIndex(m => m.id === id);
-    if (index !== -1) {
-      const updatedMedicine = {
-        ...db.data.medicines[index],
+    const now = new Date().toISOString();
+    if (useMySQL && mysqlPool) {
+      const [rows] = await mysqlPool.query('SELECT id, data FROM medicines WHERE id = ?', [id]);
+      if (rows.length === 0) {
+        logMessage(`[MySQL] 药品ID: ${id} 未找到，更新失败`, 'warn');
+        return res.status(404).json({ message: '药品未找到' });
+      }
+      const existing = JSON.parse(rows[0].data);
+      const updated = {
+        ...existing,
         ...req.body,
-        updatedAt: new Date().toISOString()
+        updatedAt: now
       };
-      db.data.medicines[index] = updatedMedicine;
-      await db.write();
+      await mysqlPool.query('UPDATE medicines SET data = ? WHERE id = ?', [
+        JSON.stringify(updated),
+        id
+      ]);
+      const updatedMedicine = { id, ...updated };
       res.json(updatedMedicine);
-      logMessage(`更新药品ID: ${id} 成功`, 'info');
+      logMessage(`[MySQL] 更新药品ID: ${id} 成功`, 'info');
     } else {
-      logMessage(`药品ID: ${id} 未找到，更新失败`, 'warn');
-      res.status(404).json({ message: '药品未找到' });
+      await db.read();
+      const index = db.data.medicines.findIndex(m => m.id === id);
+      if (index !== -1) {
+        const updatedMedicine = {
+          ...db.data.medicines[index],
+          ...req.body,
+          updatedAt: now
+        };
+        db.data.medicines[index] = updatedMedicine;
+        await db.write();
+        res.json(updatedMedicine);
+        logMessage(`更新药品ID: ${id} 成功`, 'info');
+      } else {
+        logMessage(`药品ID: ${id} 未找到，更新失败`, 'warn');
+        res.status(404).json({ message: '药品未找到' });
+      }
     }
   } catch (error) {
     logMessage(`更新药品失败: ${error.message}`, 'error');
@@ -381,18 +496,30 @@ app.put('/api/medicines/:id', async (req, res) => {
 // 删除药品
 app.delete('/api/medicines/:id', async (req, res) => {
   try {
-    await db.read();
     const id = parseInt(req.params.id);
-    const index = db.data.medicines.findIndex(m => m.id === id);
-    if (index !== -1) {
-      const deletedMedicine = db.data.medicines[index];
-      db.data.medicines.splice(index, 1);
-      await db.write();
+    if (useMySQL && mysqlPool) {
+      const [rows] = await mysqlPool.query('SELECT id, data FROM medicines WHERE id = ?', [id]);
+      if (rows.length === 0) {
+        logMessage(`[MySQL] 药品ID: ${id} 未找到，删除失败`, 'warn');
+        return res.status(404).json({ message: '药品未找到' });
+      }
+      const data = JSON.parse(rows[0].data);
+      await mysqlPool.query('DELETE FROM medicines WHERE id = ?', [id]);
       res.json({ message: '药品删除成功' });
-      logMessage(`删除药品成功: ${deletedMedicine.name.generic} (ID: ${id})`, 'info');
+      logMessage(`[MySQL] 删除药品成功: ${data.name?.generic || ''} (ID: ${id})`, 'info');
     } else {
-      logMessage(`药品ID: ${id} 未找到，删除失败`, 'warn');
-      res.status(404).json({ message: '药品未找到' });
+      await db.read();
+      const index = db.data.medicines.findIndex(m => m.id === id);
+      if (index !== -1) {
+        const deletedMedicine = db.data.medicines[index];
+        db.data.medicines.splice(index, 1);
+        await db.write();
+        res.json({ message: '药品删除成功' });
+        logMessage(`删除药品成功: ${deletedMedicine.name.generic} (ID: ${id})`, 'info');
+      } else {
+        logMessage(`药品ID: ${id} 未找到，删除失败`, 'warn');
+        res.status(404).json({ message: '药品未找到' });
+      }
     }
   } catch (error) {
     logMessage(`删除药品失败: ${error.message}`, 'error');
@@ -688,6 +815,7 @@ const callTencentYuanqiAPI = async (question) => {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${TENCENT_YUANQI_CONFIG.apiKey}`,
+        'X-Api-Key': TENCENT_YUANQI_CONFIG.apiKey,
         'X-Source': 'children-medicine-agent', // 添加X-Source请求头
         'X-App-ID': TENCENT_YUANQI_CONFIG.agentId // 添加应用ID请求头
       },
@@ -877,8 +1005,10 @@ app.post('/api/agent/chat', async (req, res) => {
     
     logMessage(`收到智能体问答请求：${question}`, 'info');
     
+    // 确保数据库为最新
+    await db.read();
     // 生成回答（异步调用）
-    const response = await generateAgentResponse(question, db);
+    const response = await generateAgentResponse(question, db.data.medicines);
     
     logMessage(`智能体回答：${response}`, 'info');
     
@@ -937,9 +1067,17 @@ let server = null;
 
 const startServer = async () => {
   try {
-    // 初始化数据库
+    if (useMySQL) {
+      await initMySQL();
+      logMessage('[MySQL] 初始化成功', 'info');
+    }
+    // 初始化本地JSON数据库（作为数据源和/或备用）
     db = await initDatabase();
     logMessage('数据库初始化成功', 'info');
+    
+    if (useMySQL && mysqlPool) {
+      await migrateLowdbToMySQL();
+    }
     
     server = app.listen(PORT, () => {
       const startMessage = `服务器运行在 http://localhost:${PORT}`;

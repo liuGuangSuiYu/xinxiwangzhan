@@ -348,6 +348,25 @@
       ],
       "shelfLife": 24,
       "storageConditions": "遮光，密闭保存。"
+    },
+    {
+      "id": 8,
+      "createdAt": "2026-01-14T04:54:11.591Z",
+      "updatedAt": "2026-01-14T04:54:11.591Z",
+      "name": {
+        "generic": "????",
+        "brand": [
+          "????"
+        ]
+      },
+      "category": "?????",
+      "ingredients": [
+        "??A"
+      ],
+      "indications": [
+        "????"
+      ],
+      "dosage": "????"
     }
   ],
   "categories": [
